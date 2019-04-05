@@ -10,14 +10,14 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateInvoicesTable extends Migration
+class CreateProjectsTable extends Migration
 {
     /**
      * Run the migrations.
      */
     public function up()
     {
-        Schema::create('invoices', function (Blueprint $table) {
+        Schema::create('projects', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->timestamps();
@@ -28,6 +28,6 @@ class CreateInvoicesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('invoices');
+        Schema::drop('projects');
     }
 }

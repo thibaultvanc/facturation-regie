@@ -10,13 +10,14 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateProjectsTable extends Migration
+class CreateInvoicesTable extends Migration
 {
     /**
      * Run the migrations.
      */
     public function up()
     {
+        dd(__METHOD__.':'.__LINE__, '__ H E R E __');
         Schema::create('invoices', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');

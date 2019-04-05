@@ -3,9 +3,18 @@
 namespace FacturationRegie\Tests\Stubs\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use FacturationRegie\Traits\RegieInvoicable;
+use FacturationRegie\Traits\IsRegiePointable;
 
 class Task extends Model
 {
-    use RegieInvoicable
+    use IsRegiePointable;
+
+    
+    protected $guarded=[];
+
+    
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
+    }
 }

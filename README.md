@@ -17,6 +17,13 @@ composer require thibaultvanc/facturation-regie
 
 ## Usage
 
+To use this package you Need 
+- User model
+- Project Model
+- pointables Models (Task & Meeting)
+- Invoice (planified)
+
+
 Need to associate your Models with traits
 
 User    => FacturationRegie\Traits\RegieInvoicable\RegieUser 
@@ -37,7 +44,75 @@ class Task extends Model
 }
 
 ```
+Default forign key to determine the responsable is "responsable_id"
+Note : overwite the method to set a différent : 
 
+```php
+public function regie_responsable()
+    {
+        return $this->belongsTo(\App\User::class, 'user_id');
+    }
+```
+
+
+
+##trasform a pointable (task / taskStatus / meeting)
+
+
+#adjust the date
+
+overwrite the getPointageDate() method. Return a Carbon Instance. if this method does not exists, it take the current time
+```php
+public function getPointageDate() :Carbon
+    {
+        return $this->done_at
+    }
+```
+
+#adjust the name
+
+overwrite the getPointageName() method. Return a Carbon Instance. if this method does not exists, it take the current time
+```php
+public function getPointageName() :Carbon
+    {
+        return $this->task_title
+    }
+```
+
+
+#adjust the date
+
+overwrite the getPointageDescription() method. Return a Carbon Instance. if this method does not exists, it take the current time
+```php
+public function getPointageDescription() :Carbon
+    {
+        return $this->body
+    }
+```
+
+
+### pointage scopes
+```php
+
+Pointage::between($date1, $date2); (carbon date or string)
+
+Pointage::forDay($date); (carbon date or carbon)
+Pointage::forMonth($date);  (prend le mois en cours)
+Pointage::forYeay('2019');  (carbon)
+Pointage::forUser($user); (user object or user_id) 
+
+Pointage::facturable();
+Pointage::noFacturable();
+
+```
+
+You can combine like this : 
+
+```php
+Pointage::forMonth(now())
+            ->forUser($user)
+            ->facturable();
+```
 
 
 

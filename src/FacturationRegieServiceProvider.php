@@ -17,8 +17,7 @@ class FacturationRegieServiceProvider extends ServiceProvider
         // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'facturation-regie');
         // $this->loadViewsFrom(__DIR__.'/../resources/views', 'facturation-regie');
         // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-        // $this->loadRoutesFrom(__DIR__.'/routes.php');
-
+        $this->loadRoutesFrom(__DIR__.'/routes.php');
         
 
         if ($this->app->runningInConsole()) {
