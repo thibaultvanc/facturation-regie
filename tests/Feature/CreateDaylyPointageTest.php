@@ -16,30 +16,76 @@ class VerifyDailyPointageTest extends TestCase
 
     
     /** @test */
-    public function given_a_date_it_verify_the_ut_against_the_miniumim_sprecified_in_config()
+    public function happy_path()
     {
-        $pointage = factory(Task::class)->create();
+        $this->post(route('facturation-regie.pointage.verify_daily'), $a = [
+          'date'=> now()->format('d-m-Y'), // 05-04-2019
+          'user_id'=> 1,
+      ])
+      ->assertOk();
+    }
+
+    /** @test */
+    public function must_specify_a_user()
+    {
+        $this->post(route('facturation-regie.pointage.verify_daily'), $a = [
+            'date'=> now()->format('d-m-Y'), // 05-04-2019
+            //'user_id'=> $user->id,
+        ])
+        ->assertStatus(302)
+        ->assertSessionHasErrors('user_id');
+    }
+
+
+    /** @test */
+    public function must_specify_a_valid_date()
+    {
+        $this->post(route('facturation-regie.pointage.verify_daily'), $a = [
+            'date'=> '', // 05-04-2019
+        ])
+        ->assertStatus(302)
+        ->assertSessionHasErrors('date');
+    }
+ 
+ 
+ 
+ 
+    /** @test */
+    public function must_specify_a_day()
+    {
+        $user = factory(User::class)->create();
 
         $this->post(route('facturation-regie.pointage.verify_daily'), $a = [
-            'date'=>now(),
-            'pointages'=>[
-            ]
+            'date'=> '1212122',
         ])
-        //->assertOk()
+        ->assertSessionHasErrors('date');
+    }
+
+
+
+
+
+    /** @test */
+    public function given_a_date_it_verify_the_ut_against_the_miniumim_sprecified_in_config()
+    {
+        $user = factory(User::class)->create();
+
+        $pointage1 = factory(Pointage::class)->create(['user_id'=>$user->id]);
+        $pointage2 = factory(Pointage::class)->create(['user_id'=>$user->id]);
+        $pointage3 = factory(Pointage::class)->create(['user_id'=>$user->id]);
+        $pointage4 = factory(Pointage::class)->create(['user_id'=>$user->id]);
+
+
+        $this->post(route('facturation-regie.pointage.verify_daily'), $a = [
+            'date'=> now()->format('d-m-Y'), // 05-04-2019
+            'user_id'=> $user->id,
+        ])
+        ->assertOk()
         ;
         
         // $this->assertDatabaseHas('pointages', ['name'=>$n]);
     }
     
-
-
-
-
-
-
-
-
-
 
     /** @test */
     public function it_requires_a_pointable_type_and_a_pointable_id()

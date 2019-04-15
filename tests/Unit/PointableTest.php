@@ -26,7 +26,7 @@ class PointableTest extends TestCase
         $task = factory(Task::class)->create();
         $this->assertCount(0, $task->pointages);
         
-        $task->tranformPointage();
+        $task->transformPointage();
 
         $task = $task->fresh();
         $this->assertCount(1, $task->pointages);
@@ -45,7 +45,7 @@ class PointableTest extends TestCase
         $this->assertCount(0, $task->pointages);
         
         $this->expectException(PointableWithoutResponsableException::class);
-        $task->tranformPointage();
+        $task->transformPointage();
     }
 
 
@@ -92,5 +92,20 @@ class PointableTest extends TestCase
             'is_facturable'=> true
         ]);
         $this->assertEquals(true, $pointage->is_facturable);
+    }
+
+
+
+
+
+    /** @test */
+    public function a_pointable_belongs_to_a_project()
+    {
+        $project = factory(Project::class)->create();
+
+        $task=factory(Task::class)->create(['project_id'=>$project->id]);
+        $task->transformPointage();
+
+        $this->assertCount(1, $project->getPointages());
     }
 }

@@ -17,7 +17,10 @@ composer require thibaultvanc/facturation-regie
 
 ## Usage
 
-To use this package you Need 
+1-edit config
+
+
+To use this package you Need
 - User model
 - Project Model
 - pointables Models (Task & Meeting)
@@ -26,7 +29,7 @@ To use this package you Need
 
 Need to associate your Models with traits
 
-User    => FacturationRegie\Traits\RegieInvoicable\RegieUser 
+User    => FacturationRegie\Traits\RegieInvoicable\RegieUser
 Invoice => FacturationRegie\Traits\RegieInvoicable\RegieInvoice
 <!-- Order   => FacturationRegie\Traits\RegieInvoicable\RegieOrder -->
 Pointage  => FacturationRegie\Traits\RegieInvoicable\RegiePointage     
@@ -45,7 +48,7 @@ class Task extends Model
 
 ```
 Default forign key to determine the responsable is "responsable_id"
-Note : overwite the method to set a différent : 
+Note : overwite the method to set a différent :
 
 ```php
 public function regie_responsable()
@@ -99,51 +102,29 @@ Pointage::between($date1, $date2); (carbon date or string)
 Pointage::forDay($date); (carbon date or carbon)
 Pointage::forMonth($date);  (prend le mois en cours)
 Pointage::forYeay('2019');  (carbon)
-Pointage::forUser($user); (user object or user_id) 
+Pointage::forUser($user); (user object or user_id)
 
 Pointage::facturable();
 Pointage::noFacturable();
 
 ```
 
-You can combine like this : 
+You can combine like this :
 
 ```php
-Pointage::forMonth(now())
+    Pointage::forProject($project)
+            ->forMonth(now())
             ->forUser($user)
             ->facturable();
 ```
 
+Additional
 
-
-
-### Testing
-
-``` bash
-composer test
+You can scope by project
+```php
+Pointage::forProject($project);
 ```
 
-### Changelog
-
-Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
-
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
-### Security
-
-If you discover any security related issues, please email info@organit.fr instead of using the issue tracker.
-
-## Credits
-
-- [Thibault Van Campenhoudt](https://github.com/thibaultvanc)
-- [All Contributors](../../contributors)
-
-## License
-
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
-
-## Laravel Package Boilerplate
-
-This package was generated using the [Laravel Package Boilerplate](https://laravelpackageboilerplate.com).
+To do that, you need :
+- on the Project Model add method ...
+----------WIP--------

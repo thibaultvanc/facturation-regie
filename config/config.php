@@ -1,4 +1,6 @@
 <?php
+use FacturationRegie\Tests\Stubs\Models\Project;
+use FacturationRegie\Tests\Stubs\Models\Task;
 
 return [
 
@@ -11,6 +13,7 @@ return [
                 'value' => 15,
                 'label' => 'minutes',
                 'amount' => 10,
+                'min_per_day'=>32,
         ],
 
         'km'=>[
@@ -40,6 +43,15 @@ return [
     ],
 
 
+    'pointable_classes'=>[
+        \FacturationRegie\Tests\Stubs\Models\Task::class,
+        \FacturationRegie\Tests\Stubs\Models\Meeting::class,
+    ],
+
+    'pointables_project_foreign_key' => 'project_id',
+
+
+
     /**
      * Model class name of users.
      */
@@ -48,21 +60,19 @@ return [
     'users_table_primary_key' => 'id',
     'users_table_foreign_key' => 'user_id',
     
-    
-    'followable_table' => 'followables',
-    /**
-     * Prefix of many-to-many relation fields.
-     */
-    'morph_prefix' => 'pointable',
-    
-    /**
-     * Date format for created_at.
-     */
-    'date_format' => 'Y-m-d H:i:s',
+
 
     /**
-     * Namespace of models.
+     * Model class name of Project.
+     'project_model' => \FacturationRegie\Tests\Stubs\Models\Project::class,
+     'projects_table_name' => 'projects',
+     'projects_table_primary_key' => 'id',
+     'projects_table_foreign_key' => 'project_id',
      */
-    'model_namespace' => 'App',
     
+
+
+
+    
+
 ];

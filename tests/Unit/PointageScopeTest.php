@@ -108,12 +108,70 @@ class PointageScopeTest extends TestCase
     {
         $pointage = factory(Pointage::class, 2)->create(['is_facturable'=>true]);
         $pointage = factory(Pointage::class, 6)->create(['is_facturable'=>false]);
-
+        
         $this->assertCount(6, Pointage::noFacturable()->get());
     }
 
 
-    // is_facturable
+    /**
+     *
+     * units and unit_types are not required
+     * When transforming these fields are set to null
+     *
+     * @test */
+    public function can_get_all_the_pointages_transformed_but_not_achieved()
+    {
+        $pointageachived = factory(Pointage::class, 3)->create();
+
+        $pointageNONachived = factory(Task::class, 2)->create()->each->transformPointage();
+        
+        $this->assertCount(2, Pointage::nonAchieved()->get());
+    }
     
-    // for a project / mission
+    /**
+     *
+     * a task belongs to a project
+     *
+     * @test */
+    public function can_get_all_the_pointages_for_a_Project()
+    {
+        $project = factory(Project::class)->create();
+        
+        $taskProject = $project->tasks()->create(['name'=>'task-1']);
+        
+        $pointage = factory(Pointage::class, 5)->create([
+            'pointable_type'=> get_class($taskProject),
+            'pointable_id'=> $taskProject->id
+        ]);
+            
+        
+        //intrus
+        factory(Pointage::class, 1)->create();
+            
+        
+        $this->assertCount(5, Pointage::forProject($project)->get());
+    }
+
+
+    /** @test */
+    public function global_scope_test_with_multiple_scopes()
+    {
+        $user = factory(User::class)->create();
+        $project = factory(Project::class)->create();
+        $taskProject = $project->tasks()->create(['name'=>'task-1', 'responsable_id'=>$user->id]);
+        
+        $taskProject->transformPointage(['is_facturable'=>1]);
+       
+        $q = Pointage::query()
+        ->forProject($project)
+        ->forMonth(now())
+        ->forUser($user)
+        ->facturable();
+        
+        $this->assertCount(1, $q->get());
+
+        $founded = $q->get()->first();
+        $this->assertEquals('task-1', $founded->name);
+        $this->assertEquals('task-1(description)', $founded->description);
+    }
 }

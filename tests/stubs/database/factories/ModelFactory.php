@@ -57,14 +57,19 @@ $factory->define(Meeting::class, function (Faker $faker) {
 $factory->define(Pointage::class, function (Faker $faker) {
     $faker = \Faker\Factory::create("fr_FR");
 
-    $type = [ Task::class, Meeting::class ][rand(0, 1)];
+    $pointableClass = [ Task::class, Meeting::class ][rand(0, 1)];
 
+    $a = Pointage::getUnits();
+    $type = $a[rand(0, count($a)-1)];
     return [
         "date" => now(),
         "user_id" => factory(User::class)->create()->id,
         "pointable_id" => factory(Task::class)->create()->id,
-        "pointable_type" => $type,
+        "pointable_type" => $pointableClass,
         "name" => $faker->name,
         "description" => $faker->sentence,
+
+        "units"=> rand(0, 100),
+        "unit_type"=> $type
     ];
 });

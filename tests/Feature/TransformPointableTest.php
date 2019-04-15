@@ -18,6 +18,7 @@ class TransformPointableTest extends TestCase
 {
     use RefreshDatabase;
 
+
     
     /** @test */
     public function can_transform_a_pointable()

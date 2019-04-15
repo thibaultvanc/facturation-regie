@@ -11,6 +11,7 @@ class FacturationRegieServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+      //dd('1232222',1232222);
         /*
          * Optional methods to load your package assets
          */
@@ -18,12 +19,12 @@ class FacturationRegieServiceProvider extends ServiceProvider
         // $this->loadViewsFrom(__DIR__.'/../resources/views', 'facturation-regie');
         // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadRoutesFrom(__DIR__.'/routes.php');
-        
+
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__.'/../config/config.php' => config_path('facturation-regie.php'),
-            ], 'config');
+            ], 'config-facturation-regie');
 
             // Publishing the views.
             /*$this->publishes([
@@ -50,6 +51,7 @@ class FacturationRegieServiceProvider extends ServiceProvider
      */
     public function register()
     {
+      dd(1223);
         // Automatically apply the package configuration
         $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'facturation-regie');
 

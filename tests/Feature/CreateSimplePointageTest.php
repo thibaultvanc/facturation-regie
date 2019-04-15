@@ -91,9 +91,26 @@ class CreateSimplePointageTest extends TestCase
     }
    
     /** @test */
+    public function it_requires_a_namem_min_10()
+    {
+        $r = factory(Pointage::class)->raw(['name'=>'short']);
+        $this->post(route('facturation-regie.pointage.store'), $r)
+                    ->assertSessionHasErrors('name');
+    }
+   
+    /** @test */
     public function it_requires_a_description()
     {
         $r = factory(Pointage::class)->raw(['description'=>null]);
+        $this->post(route('facturation-regie.pointage.store'), $r)
+                    ->assertSessionHasErrors('description');
+    }
+
+
+    /** @test */
+    public function it_requires_a_description_min()
+    {
+        $r = factory(Pointage::class)->raw(['description'=>'too_short']);
         $this->post(route('facturation-regie.pointage.store'), $r)
                     ->assertSessionHasErrors('description');
     }
